@@ -1,0 +1,247 @@
+package application;
+	
+import java.io.File;
+
+import javafx.scene.image.Image;
+import javafx.animation.RotateTransition;
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
+
+public class Main extends Application {
+	@Override
+	public void start(Stage primaryStage) {
+		primaryStage.setTitle("Syndicate");
+		Image icon = new Image(getClass().getResourceAsStream("title.jpg"));
+		primaryStage.getIcons().add(icon);
+		try {
+			
+			StackPane stackPane = new StackPane();
+			AnchorPane root = new AnchorPane();
+			stackPane.getChildren().add(root);
+			Scene scene = new Scene(stackPane,390,400);
+			
+			JFXDialogLayout dialogue_layout= new JFXDialogLayout();
+			dialogue_layout.setPrefSize(400, 50);
+			dialogue_layout.setHeading(new Text("Syndicate"));
+			dialogue_layout.setBody(new Text("About : This software is mainely focused for managing your \nrandom stored files(of different format."
+					+ "\nIt arrange your files more efficiently in just couple of seconds."
+					+ "\n\nHow to do : Just enter your required clean up folder\n(or browse it manually) and click \"Clean It\" button."));
+			JFXDialog help_dialogue = new JFXDialog(stackPane, dialogue_layout, JFXDialog.DialogTransition.TOP);
+			
+			
+			Pane pane = new Pane();
+			pane.setStyle("-fx-background-color : #00227b");
+			pane.setPrefSize(400, 35);
+			
+			Pane pane1 = new Pane();
+			pane1.setStyle("-fx-background-color :  #5c6bc0");
+			pane1.setPrefSize(400, 70);
+			pane1.setLayoutX(0);
+			pane1.setLayoutY(35);
+			
+			Pane pane2 = new Pane();
+			pane2.setStyle("-fx-background-color :  #00227b");
+			pane2.setPrefSize(400, 35);
+			pane2.setLayoutX(0);
+			pane2.setLayoutY(375);
+
+			javafx.scene.shape.Rectangle rect1= new javafx.scene.shape.Rectangle(165, 275, 15, 15);
+			rect1.setFill(Paint.valueOf("#dd2020"));
+			rect1.setStroke(Paint.valueOf("#dd2020"));
+			rect1.setRotate(45);
+			
+			javafx.scene.shape.Rectangle rect2= new javafx.scene.shape.Rectangle(190, 275, 15, 15);
+			rect2.setFill(Paint.valueOf("#1fe13f"));
+			rect2.setStroke(Paint.valueOf("#1fe13f"));
+			rect2.setRotate(45);
+			
+			javafx.scene.shape.Rectangle rect3= new javafx.scene.shape.Rectangle(215, 275, 15, 15);
+			rect3.setFill(Paint.valueOf("#1e90ff"));
+			rect3.setStroke(Paint.valueOf("#1e90ff"));
+			rect3.setRotate(45);
+			
+			rect1.setVisible(false);
+			rect2.setVisible(false);
+			rect3.setVisible(false);
+			
+			RotateTransition rt1 = new RotateTransition(Duration.millis(1000), rect1);
+	        RotateTransition rt2= new RotateTransition(Duration.millis(1000), rect2);
+	        RotateTransition rt3 = new RotateTransition(Duration.millis(1000), rect3);
+	        
+	        rt1.setByAngle(-360);rt1.setCycleCount(1);rt1.setAutoReverse(true);
+	        rt2.setByAngle(360);rt2.setCycleCount(1);rt2.setAutoReverse(true);
+	        rt3.setByAngle(-360);rt3.setCycleCount(1);rt3.setAutoReverse(true);
+			
+			Label header= new Label("Syndicate");
+			header.setPrefSize(244, 75);
+			header.setLayoutX(125);
+			header.setLayoutY(30);
+			header.setFont(new Font(36));
+			header.setTextFill(Paint.valueOf("WHITE"));
+			
+			Label footer = new Label("@ 2017 Persistent Systems Ltd.");
+			footer.setLayoutX(125);
+			footer.setLayoutY(5);
+			footer.setTextFill(Paint.valueOf("#ffffff"));
+			
+			JFXButton help = new JFXButton("Help");
+			help.setLayoutX(350);
+			help.setLayoutY(5);
+			help.setStyle("-fx-background-color : #00227b");
+			help.setTextFill(Paint.valueOf("WHITE"));
+			pane.getChildren().add(help);
+			
+			help.setOnAction( new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					help_dialogue.show();
+				}
+			});
+			
+			JFXTextField textfield = new JFXTextField();
+			textfield.setPrefSize(225, 25);
+			textfield.setLayoutX(50);
+			textfield.setLayoutY(165);
+			textfield.setPromptText("Enter file path");
+			textfield.setLabelFloat(true);
+			
+			RequiredFieldValidator req_validator= new RequiredFieldValidator();
+			textfield.getValidators().add(req_validator);
+	        req_validator.setMessage("This field should not be empty !");
+	        
+	        textfield.focusedProperty().addListener(new ChangeListener<Boolean>() {
+	            @Override
+	            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+	                    if(!newValue)
+	                    	textfield.validate();
+	            }
+	        });
+	        			
+			JFXButton browse= new JFXButton("Browse");
+			browse.setLayoutX(307);
+			browse.setLayoutY(165);
+			browse.setStyle("-fx-background-color :#26418f;");
+			browse.setTextFill(Paint.valueOf("#ffffff"));
+			
+			JFXButton start= new JFXButton("Clean It");
+			start.setFont(new Font(16));
+			start.setPrefSize(200, 40);
+			start.setLayoutX(75);
+			start.setLayoutY(220);
+			start.setStyle("-fx-background-color:#26418f;");
+			start.setTextFill(Paint.valueOf("#ffffff"));
+			
+			Label success = new Label("Files has been sorted !!");
+			success.setFont(new Font(18));
+			success.setLayoutX(109);
+			success.setLayoutY(295);
+			success.setTextFill(Paint.valueOf("#0ab953"));
+			success.setVisible(false);
+			
+			Label error = new Label("Directory does not exists.");
+			error.setTextFill(Paint.valueOf("#dd2020"));
+			error.setVisible(false);
+			error.setLayoutX(50);
+			error.setLayoutY(195);
+			
+			start.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					error.setVisible(false);
+					File f = new File(textfield.getText());
+					if(textfield.getText().equals(""))
+						textfield.validate();
+					else if(!f.isDirectory()){
+						error.setVisible(true);
+					}
+                    else{
+                    	req_validator.setMessage("This field should not be empty !");
+                    	rect1.setVisible(true);
+                    	rect2.setVisible(true);
+                    	rect3.setVisible(true);
+                    	
+                    	rt1.play();
+                        rt1.setOnFinished((e)->{
+                            rt2.play();
+                        });
+                        rt2.setOnFinished((e)->{
+                            rt3.play();
+                        });
+                       
+                        rt3.setOnFinished((e)->{
+                			rect1.setVisible(false);
+                			rect2.setVisible(false);
+                			rect3.setVisible(false);
+                			try {
+								new Client().cleanThisFolder(textfield.getText());
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+                			success.setVisible(true);
+                        });
+                    }
+
+				}
+			});
+			
+			
+			DirectoryChooser directoryChooser = new DirectoryChooser();
+			
+			directoryChooser.setTitle("Copy Resource File path");
+			browse.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {			
+					success.setVisible(false);
+					File f = directoryChooser.showDialog(primaryStage);	
+					textfield.setText(f.getAbsolutePath());
+				}
+			});
+			
+			root.getChildren().addAll(rect1,rect2,rect3);
+			root.getChildren().add(error);
+			root.getChildren().add(pane);
+			root.getChildren().add(pane1);
+			root.getChildren().add(success);
+			pane2.getChildren().add(footer);
+			root.getChildren().add(pane2);
+			root.getChildren().add(header);
+			root.getChildren().add(browse);
+			root.getChildren().add(start);
+			root.getChildren().add(textfield);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
+			primaryStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+}
